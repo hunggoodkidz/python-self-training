@@ -1,0 +1,21 @@
+name: 3d
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip=24.2
+  - setuptools=75.1.0
+  - wheel=0.44.0
+  - sqlite=3.45.3
+  - zlib=1.2.13
+  - psycopg2                # PostgreSQL adapter
+  - redis-py                # Redis client for caching
+  - uvicorn                 # ASGI server for FastAPI
+  - pytorch                 # PyTorch for deep learning
+  - torchvision             # PyTorch for image transformations
+  - opencv                  # Image processing
+  - trimesh                 # Handling 3D meshes and geometry
+  - fastapi                 # FastAPI web framework
+  - aio-pika                # RabbitMQ client for task queues
+  - sqlalchemy=2.0.36
+  - meshio                  # Alternative for handling 3D model formats like OBJ and GLB
