@@ -1,0 +1,16 @@
+name: 3d
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip=24.2
+  - setuptools=75.1.0
+  - wheel=0.44.0
+  - sqlite=3.45.3
+  - zlib=1.2.13
+  - psycopg2                 # PostgreSQL interaction
+  - redis-py                 # Redis caching client
+  - uvicorn                  # ASGI server for FastAPI
+  - fastapi                  # FastAPI for backend
+  - aio-pika                 # RabbitMQ client for task queue
+  - tensorflow==2.10.0       # TensorFlow Machine Learning
