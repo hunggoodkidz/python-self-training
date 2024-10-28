@@ -1,29 +1,35 @@
-import cv2
-import numpy as np
-import trimesh
-from io import BytesIO
+from sqlalchemy.orm import Session
+from app.models.object_model import ObjectModel
+from app.schemas.object_schema import ObjectCreate
+from app.models.ai_model import process_image_to_3d, export_3d_model  # Importing AI processing and export functions
 
-def preprocess_image(image_data):
-    # Convert image bytes to an OpenCV image
-    nparr = np.frombuffer(image_data, np.uint8)
-    image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    return image
+def create_object(db: Session, object_data: ObjectCreate):
+    # Create the 3D object in the database
+    db_object = ObjectModel(**object_data.dict())
+    db.add(db_object)
+    db.commit()
+    db.refresh(db_object)
+    return db_object
 
-def generate_3d_model(image_data):
-    # Preprocess the image
-    image = preprocess_image(image_data)
+def get_object(db: Session, object_id: int):
+    return db.query(ObjectModel).filter(ObjectModel.id == object_id).first()
+
+def generate_3d_object(image_bytes: bytes, db: Session):
+    # Generate 3D object from image
+    vertices = process_image_to_3d(image_bytes)
     
-    # Placeholder: Use ML or an algorithm to generate vertices from the image
-    vertices = np.array([[0, 0, 0], [1, 0, 0], [0, 1, 0]])  # Example vertices
+    # Store the object in the database
+    db_object = ObjectModel(
+        name="Generated 3D Object",
+        vertices=vertices
+    )
+    db.add(db_object)
+    db.commit()
+    db.refresh(db_object)
     
-    # Create 3D mesh
-    mesh = trimesh.Trimesh(vertices=vertices)
-    
-    # Export as OBJ and GLB
-    obj_file = "output.obj"
-    glb_file = "output.glb"
-    
-    mesh.export(obj_file)
-    mesh.export(glb_file)
-    
-    return obj_file, glb_file
+    # Export 3D object to file (OBJ or GLB)
+    file_url = export_3d_model(vertices, file_format="obj")  # Export to OBJ for now
+    db_object.file_url = file_url
+    db.commit()
+
+    return db_object
