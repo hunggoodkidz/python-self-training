@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useSpring, animated } from '@react-spring/three';
-import { useDrag } from 'react-use-gesture';
-import { SliderMesh } from './SliderMesh';
+import { RotatingMesh } from './RotatingMesh'; // Import the updated RotatingMesh
 
-const colors = ["#ff0000", "#00ff00", "#0000ff", "#ff00ff", "#00ffff" , "#ff00ff", "#00ffff" ,"#ff00ff", "#00ffff" ];
+const colors = ["#ff0000", "#00ff00", "#0000ff", "#ff00ff", "#00ffff"];
 
 export const Slider = () => {
   const [index, setIndex] = useState(0);
@@ -12,35 +11,28 @@ export const Slider = () => {
   // Animated position for sliding effect
   const { x } = useSpring({ x: -index * 3 });
 
-  // Handle drag gesture to navigate between items
-  const bind = useDrag(({  direction: [xDir], distance, cancel }) => {
-    if (distance > 50) {
-      if (xDir > 0 && index > 0) {
-        setIndex(index - 1);
-      } else if (xDir < 0 && index < colors.length - 3) {
-        setIndex(index + 1);
-      }
-      cancel();
-    }
-  });
-
-  // Navigation buttons
+  // Functions to handle slide navigation
   const goLeft = () => index > 0 && setIndex(index - 1);
   const goRight = () => index < colors.length - 3 && setIndex(index + 1);
 
   return (
     <div className="relative w-full h-screen flex flex-col items-center justify-center">
-      <div {...bind()} className="w-full h-full cursor-grab">
-        <Canvas>
-          <ambientLight />
-          <pointLight position={[10, 10, 10]} />
-          <animated.group position-x={x}>
-            {colors.map((color, i) => (
-              <SliderMesh key={i} color={color} position={[i * 3, 0, 0]} />
-            ))}
-          </animated.group>
-        </Canvas>
-      </div>
+      <Canvas>
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
+
+        {/* Render each object, applying rotation controls to the selected (middle) one */}
+        <animated.group position-x={x}>
+          {colors.map((color, i) => (
+            <RotatingMesh
+              key={i}
+              color={color}
+              position={[i * 3, 0, 0]}
+              isSelected={i === index} // Enables independent OrbitControls only for the selected object
+            />
+          ))}
+        </animated.group>
+      </Canvas>
 
       {/* Navigation Buttons */}
       <button onClick={goLeft} className="absolute left-10 top-1/2 text-white text-3xl">{'<'}</button>

@@ -1,0 +1,25 @@
+3D-Model-Showcase/
+├── public/                # Static assets and HTML files
+│   └── models/            # Placeholder for 3D models (like .glb, .obj)
+│       └── example.glb
+├── src/                   # Source files for the project
+│   ├── assets/            # Static assets like images, fonts
+│   ├── components/        # Reusable UI components
+│   │   ├── Carousel.tsx   # Carousel component
+│   │   ├── ModelViewer.tsx # 3D model viewer component with orbit controls
+│   │   └── Navigation.tsx # Navigation buttons (Next, Prev)
+│   ├── pages/             # Pages (if you have multiple pages, e.g., Home, About)
+│   │   └── PreviewPage.tsx   # Main showcase page
+│   ├── hooks/             # Custom hooks (e.g., for managing model state)
+│   ├── layouts/           # Layout components (for consistent page structure)
+│   ├── styles/            # Global and component-specific styles
+│   │   └── globals.css    # Global styles (e.g., for Tailwind imports)
+│   ├── App.tsx            # Root component
+│   ├── main.tsx           # Entry point
+│   └── vite-env.d.ts      # Vite environment types (when using TypeScript)
+├── .eslintrc.js           # ESLint configuration
+├── .prettierrc            # Prettier configuration
+├── tailwind.config.js     # Tailwind CSS configuration
+├── tsconfig.json          # TypeScript configuration
+├── vite.config.ts         # Vite configuration for faster builds
+└── package.json           # Project metadata and dependencies
