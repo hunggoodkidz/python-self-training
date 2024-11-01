@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import ModelViewer from './ModelViewer';
 import Navigation from './Navigation';
+import DotIndicator from './DotIndicator';
+import Border from './Border';
 
 // Imagine this array is loaded from your database
 const modelNames = ['Model1', 'Model2', 'Model3', 'Model4', 'Model5', 'Model6', 'Model7', 'Model8', 'Model9', 'Model10'];
@@ -27,22 +29,42 @@ const Carousel: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex items-center justify-center space-x-6 mb-4">
+    <div className="flex flex-col items-center relative">
+      {/* Top Navigation Buttons */}
+      <div className="flex items-center justify-between w-full px-4 mb-4">
         <Navigation direction="prev" onClick={handlePrev} />
+        <Navigation direction="next" onClick={handleNext} />
+      </div>
 
-        <div className="flex space-x-8">
-          {visibleModels.map((model, index) => (
-            <ModelViewer
-              key={model}
-              isSelected={index === 1} // Center model is always at index 1 in visibleModels
-              model={model}
-              blurred={index !== 1} // Only center model is not blurred
-            />
-          ))}
+      <div className="flex items-center justify-center space-x-8 mb-4">
+        {/* Left Model - slightly smaller */}
+        <div className="w-52 h-52 flex items-center justify-center opacity-80">
+          <ModelViewer
+            isSelected={false} // Left model is not selected, so it won't spin
+            model={visibleModels[0]}
+            blurred={true}
+          />
         </div>
 
-        <Navigation direction="next" onClick={handleNext} />
+        {/* Middle Model - larger with border */}
+        <Border>
+          <div className="w-64 h-64 flex items-center justify-center">
+            <ModelViewer
+              isSelected={true} // Middle model is selected, so it will spin
+              model={visibleModels[1]}
+              blurred={false}
+            />
+          </div>
+        </Border>
+
+        {/* Right Model - slightly smaller */}
+        <div className="w-52 h-52 flex items-center justify-center opacity-80">
+          <ModelViewer
+            isSelected={false} // Right model is not selected, so it won't spin
+            model={visibleModels[2]}
+            blurred={true}
+          />
+        </div>
       </div>
 
       {/* Display model count (e.g., "2 / 10") */}
@@ -51,14 +73,7 @@ const Carousel: React.FC = () => {
       </div>
 
       {/* Dot indicators */}
-      <div className="flex space-x-2">
-        {modelNames.map((_, index) => (
-          <div
-            key={index}
-            className={`w-3 h-3 rounded-full ${index === selectedIndex ? 'bg-white' : 'bg-gray-500'}`}
-          />
-        ))}
-      </div>
+      <DotIndicator count={modelNames.length} selectedIndex={selectedIndex} />
     </div>
   );
 };
